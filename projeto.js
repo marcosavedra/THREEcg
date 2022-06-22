@@ -22,7 +22,7 @@ scene.add(cube);
 
 
 //Configurando a profundidade da camera
-cameraa.position.z = 5
+camera.position.z = 5
 
 function animate(){
     requestAnimationFrame(animate);
