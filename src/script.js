@@ -65,8 +65,10 @@ loader.load(
             }
         
         })
-        root.position.set(17,50,50)
-        const scale = 2.25
+        root.position.set(-50,80,50) //(17,50,50)
+
+        const scale = 8
+        //root.rotateX(-2.5708)
         root.rotateY(2.5708)
         root.scale.set(scale, scale , scale)
         cloud = root
