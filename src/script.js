@@ -90,72 +90,6 @@ loader.load(
     }
 );
 
-// Load a glTF resource -> Man
-/*loader.load(
-    // resource URL
-    'man.gltf',
-    // called when the resource is loaded
-    function ( gltf ) {
-
-        const root = gltf.scene
-        root.traverse(function(model) {
-            if(model.isMesh){
-                model.castShadow = true;
-                model.receiveShadow = false;
-            }
-        
-        })
-        root.position.set(-2.7,9.4,64)
-        const scale = 1.3
-        root.rotateY(-1.1)
-        root.scale.set(scale, scale , scale)
-        scene.add( root );
-
-    },
-    // called while loading is progressing
-    function ( xhr ) {
-
-        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-    },
-    // called when loading has errors
-    function ( error ) {
-
-        console.log( 'An error happened' );
-
-    }
-);*/
-
-
-// Lights:
-// Light 1
-/*const luzAmbiente = new THREE.AmbientLightProbe(0x858585, 2.5)
-scene.add(luzAmbiente)*/
-
-/*//Light 2
-const pointLight = new THREE.PointLight(0xc9671c, 3)
-pointLight.position.set(-30,36,32)
-pointLight.castShadow = true
-pointLight.shadow.bias = -0.0004
-
-const helper = new THREE.PointLightHelper(pointLight, 1)
-scene.add(helper)
-scene.add(pointLight)
-gui.add(pointLight.position, 'x').min(-30).max(30).step(0.01)
-gui.add(pointLight.position, 'y').min(0).max(30).step(0.01)
-gui.add(pointLight.position, 'z').min(-30).max(30).step(0.01)
-gui.add(pointLight, 'intensity').min(0).max(10).step(0.1)*/
-
-//Light 3
-/*const pointLight2 = new THREE.PointLight(0x808eff, 0.6)
-pointLight2.position.set(0,60,67)
-pointLight2.castShadow = true
-pointLight2.shadow.bias = -0.0004
-const helper2 = new THREE.PointLightHelper(pointLight2, 1)
-scene.add(helper2)
-scene.add(pointLight2)*/
-
-
   {
     const skyColor = 0xB1E1FF;  // light blue
     const groundColor = 0xB97A20;  // brownish orange
@@ -217,8 +151,8 @@ window.addEventListener('resize', () =>
 /**
  * Camera
  */
-const camera = new THREE.PerspectiveCamera(110, sizes.width / sizes.height, 0.1, 120)
-camera.position.set(40,30,-30)
+const camera = new THREE.PerspectiveCamera(110, sizes.width / sizes.height, 0.9, 120)
+camera.position.set(30,70,-50)
 
 scene.add(camera)
 // Controls
