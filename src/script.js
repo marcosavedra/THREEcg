@@ -1,25 +1,26 @@
 import './style.css'
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
-import * as dat from 'dat.gui'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js' //permite que a camera orbite em torno de um alvo 
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js"; //para a importaçao dos modelos 3d
+import * as dat from 'dat.gui' //permite adicionar os controles de interação do usuario com a cena 
 
-//Var's
+//Variavel (para animação)
 let cloud
 
-// Debug
+// para add controles de interação
 const gui = new dat.GUI()
+
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
+
 // Scene
 const scene = new THREE.Scene()
 
 //Loader
 const loader = new GLTFLoader();
 loader.load(
-    // resource URL
+    // importando cenario - fazenda 
     'scene.gltf',
-    // called when the resource is loaded
     function ( gltf ) {
 
         const root = gltf.scene
@@ -36,25 +37,20 @@ loader.load(
         scene.add( root );
 
     },
-    // called while loading is progressing
-    function ( xhr ) {
-
-        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-    },
-    // called when loading has errors
-    function ( error ) {
-
-        console.log( 'An error happened' );
-
-    }
+    // chamado no carregamento do loader.
+        function ( xhr ) {
+            console.log( ( xhr.loaded / xhr.total * 100 ) + '% carregado' );
+        },
+     // chamado quando há erros no loader do objeto
+        function ( error ) {
+            console.log( 'Ocorreu um erro' );
+        }
 );
 
-// Load a glTF resource -> Cloud
+
 loader.load(
-    // resource URL
+    // importando nuvem
     'cloud.gltf',
-    // called when the resource is loaded
     function ( gltf ) {
 
         const root = gltf.scene
@@ -67,7 +63,7 @@ loader.load(
         })
         root.position.set(-50,80,50) //(17,50,50)
 
-        const scale = 8
+        const scale = 7
         //root.rotateX(-2.5708)
         root.rotateY(2.5708)
         root.scale.set(scale, scale , scale)
@@ -76,23 +72,21 @@ loader.load(
         scene.add( root );
 
     },
-    // called while loading is progressing
+    // chamado no carregamento do loader.
     function ( xhr ) {
-
-        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
+        console.log( ( xhr.loaded / xhr.total * 100 ) + '% carregado' );
     },
-    // called when loading has errors
+    // chamado quando há erros no loader do objeto
     function ( error ) {
-
-        console.log( 'An error happened' );
-
+        console.log( 'Ocorreu um erro' );
     }
 );
 
+
+//configuração de iluminação de cena
   {
-    const skyColor = 0xB1E1FF;  // light blue
-    const groundColor = 0xB97A20;  // brownish orange
+    const skyColor = 0xB1E1FF;  // azul claro
+    const groundColor = 0xB97A20;  // laranja acastanhado
     const intensity = 0.6;
     const light2 = new THREE.HemisphereLight(skyColor, groundColor, intensity);
     scene.add(light2);
@@ -103,7 +97,7 @@ loader.load(
     const intensity = 0.8;
     const light = new THREE.DirectionalLight(color, intensity);
     light.castShadow = true;
-    light.position.set(0, 0, 10); //onde  a luz...
+    light.position.set(0.44, 16.2, 12.8); 
     light.target.position.set(0, 0, 0); // foco da luz
 
     light.shadow.bias = -0.004;
@@ -111,6 +105,7 @@ loader.load(
     light.shadow.mapSize.height = 2048;
     scene.add(light);
     scene.add(light.target);
+    //adicionando controles da iluminação de cena
     gui.add(light.position, 'x').min(-30).max(30).step(0.01)
     gui.add(light.position, 'y').min(0).max(30).step(0.01)
     gui.add(light.position, 'z').min(-30).max(30).step(0.01)
@@ -127,7 +122,7 @@ loader.load(
 }
 
 
-//Sizes
+//config de tamanhos
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -135,27 +130,25 @@ const sizes = {
 
 window.addEventListener('resize', () =>
 {
-    // Update sizes
+    // atualizando tamanhos
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
 
-    // Update camera
+    // atualizando camera
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
 
-    // Update renderer
+    // atualizando renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-/**
- * Camera
- */
+//camera
 const camera = new THREE.PerspectiveCamera(110, sizes.width / sizes.height, 0.9, 120)
-camera.position.set(30,70,-50)
+camera.position.set(45,45,-50)
 
 scene.add(camera)
-// Controls
+// Controles de orbita
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
@@ -163,41 +156,41 @@ controls.enableDamping = true
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = true; //renderiza mapas de sombra dos objetos
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setClearColor( 0xaddaff, 1);
 
-//Animate
+//Animação
 const clock = new THREE.Clock()
 
 let moveSpeed = 0.08
 
-const tick = () =>
+const animacao = () =>
 {
-    // Update objects
+    // atualizando a movimentação da nuvem
     if(cloud){
-        if(cloud.position.z >= 43)
+        if(cloud.position.y >= 60) 
+        {
+            moveSpeed *= -1
+        } 
+        if(cloud.position.y <= 80)
         {
             moveSpeed *= -1
         }
-        if(cloud.position.z <= 68)
-        {
-            moveSpeed *= -1
-        }
-        cloud.position.z += moveSpeed
+        cloud.position.y += moveSpeed //gerando movimento de subir e descer. 
     }
 
     const elapsedTime = clock.getElapsedTime()
 
-    //Update Orbital Controls
+    //atualizando controles de orbita da camera
     controls.update()
 
-    // Render
+    // Renderizador
     renderer.render(scene, camera)
 
-    // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
+    // chama a animacao novamente para o próximo frame 
+    window.requestAnimationFrame(animacao)
 }
 
-tick()
+animacao()
